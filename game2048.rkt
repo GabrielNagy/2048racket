@@ -37,7 +37,7 @@
 ; (zero-replace n v list) replaces the n-th zero in the list l with v
 (define (zero-replace n v l)
   (let ([x (position-of-zero l n)])
-    (append (take l x) (cons v (drop l (+ i 1))))))
+    (append (take l x) (cons v (drop l (+ x 1))))))
 
 ; (split-4 l) splits a list elements into chunks of lists of 4 elements
 (define (split-4 l)
@@ -73,7 +73,21 @@
 ; This function can be implemented by nested if's to perform case distinction:
 ;  - if row has length 0, 1, 2, 3, 4 ; if some neighboring elements ar equal; etc.
 (define (collapseRow row)
-  'your-code-here)
+  (local [(define (add-zeroes l n)
+            (append l (make-list (- n (length l)) 0)))
+          (define (combine row)
+            (cond [(<= (length row) 1) row]
+                  [(= (car row) (caar row))
+                   (cons (* (car row) 2) (combine (drop row 2)))]
+                  [else (cons (car row) (combine (rest row)))]))
+          (define (combine-all row)
+            (cond [(<= (length row) 1) 0]
+                  [(= (car row) (caar row))
+                   (+ (* (car row 2)) (combine-all (drop row 2)))]
+                  [else (combine-all (rest row))]))]
+    (add-zeroes (combine (filter non-zero? row)) (length row))))
+            
+          
 
 ; detect neighbor cells in a row
 (define (neighbor-cells? row)
