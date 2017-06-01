@@ -108,7 +108,13 @@
 
 ; detect if the game is lost
 (define (isLost? game)
-  'your-code-here)
+  (let* ([gameaux game])
+    (cond [(= game (moveLeft gameaux)) #t]
+        [(= game (moveRight gameaux)) #t]
+        [(= game (moveUp gameaux)) #t]
+        [(= game (moveDown gameaux)) #t]
+        [else #f])))
+                                                       
   
 ; transpose a matrix
 (define (transpose A) 
@@ -152,14 +158,22 @@
 ;    2) The new board is obtained by reversing the rows of the previously computed board, 
 ;       and then transposing it
 (define (moveDown game)
-  'your-code-here)
+  (define rows-with-score
+    (map (compose collapseRow (lambda (row) (filter non-zero? row)))
+         (transpose (reverse (Game-board game)))))
+  (Game (transpose (reverse (map cdr rows-with-score)))
+        (foldr + (Game-score game) (map car rows-with-score))))
 
 ; moveRight simulates the shift to the right of all tiles
 ; Note that a moveRight can be simulated as follows:
 ;    1) we perform a moveLeft of the board obtained by reversing all rows.
 ;    2) The new board is obtained by reversing the rows of the previously computed board
 (define (moveRight game)
-  'your-code-here)
+  (define rows-with-score
+    (map (compose collapseRow (lambda (row) (filter non-zero? row)))
+         reverse (Game-board game)))
+  (Game (reverse (map cdr rows-with-score))
+        (foldr + (Game-score game) (map car rows-with-score))))
 
 ; a functional that returns the function that performs the move 
 ; chosen by the user 
