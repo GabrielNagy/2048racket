@@ -77,9 +77,9 @@
             (append l (make-list (- n (length l)) 0)))
           (define (combine row)
             (cond [(<= (length row) 1) row]
-                  [(= (car row) (caar row))
-                   (cons (* (car row) 2) (combine (drop row 2)))]
-                  [else (cons (car row) (combine (rest row)))]))
+                  [(= (first row) (second row))
+                   (cons (* (first row) 2) (combine (drop row 2)))]
+                  [else (cons (first row) (combine (rest row)))]))
           (define (combine-all row)
             (cond [(<= (length row) 1) 0]
                   [(= (car row) (caar row))
@@ -108,12 +108,11 @@
 
 ; detect if the game is lost
 (define (isLost? game)
-  (let* ([gameaux game])
-    (cond [(= game (moveLeft gameaux)) #t]
-        [(= game (moveRight gameaux)) #t]
-        [(= game (moveUp gameaux)) #t]
-        [(= game (moveDown gameaux)) #t]
-        [else #f])))
+    (cond [(eq? game (moveLeft game)) #t]
+        [(eq? game (moveRight game)) #t]
+        [(eq? game (moveUp game)) #t]
+        [(eq? game (moveDown game)) #t]
+        [else #f]))
                                                        
   
 ; transpose a matrix
