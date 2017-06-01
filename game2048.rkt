@@ -103,7 +103,8 @@
 ; detect if the game is won
 ;
 (define (isWon? game)
-  'your-code-here)
+  (let* ([cell-list (apply append (Game-board game))])
+    (if (member 2048 cell-list) #t #f)))
 
 ; detect if the game is lost
 (define (isLost? game)
